@@ -1,0 +1,47 @@
+import { renderHook, act } from '@testing-library/react-hooks';
+import { useForm } from '..';
+import { controls, dependenControls } from './models/controls';
+
+test('Should use useForm hook', () => {
+  const { result } = renderHook(() => useForm(controls));
+  expect(result.current.form.controls.test.value).toBe('');
+  expect(result.current.form.controls.test.error).toBeTruthy();
+  expect(result.current.form.controls.test.errorMessage).toBe('test is required');
+  expect(result.current.form.valid).toBeFalsy();
+});
+
+test('Should update form state - on handleControlEvent', () => {
+  const { result } = renderHook(() => useForm(controls));
+
+  act(() => {
+    result.current.handleControlEvent({
+      target: { name: 'test', value: 'new test value' },
+    });
+  });
+  expect(result.current.form.controls.test.value).toEqual('new test value');
+  expect(result.current.form.controls.test.error).toBeFalsy();
+  expect(result.current.form.controls.test.errorMessage).toBe('');
+  expect(result.current.form.valid).toBeTruthy();
+});
+
+test('Should use useForm hook -  dependent controls', () => {
+  const { result } = renderHook(() => useForm(dependenControls));
+  expect(result.current.form.controls.control2.value).toEqual('');
+  expect(result.current.form.controls.control2.error).toBeTruthy();
+  expect(result.current.form.controls.control2.errorMessage).toBe('Control2 should match with control1');
+  expect(result.current.form.valid).toBeFalsy();
+});
+
+test('Should update form state - on handleControlEvent', () => {
+    const { result } = renderHook(() => useForm(dependenControls));
+  
+    act(() => {
+      result.current.handleControlEvent({
+        target: { name: 'control2', value: 'should match' },
+      });
+    });
+    expect(result.current.form.controls.control2.value).toEqual('should match');
+    expect(result.current.form.controls.control2.error).toBeFalsy();
+    expect(result.current.form.controls.control2.errorMessage).toBe('');
+    expect(result.current.form.valid).toBeTruthy();
+  });

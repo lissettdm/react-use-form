@@ -12,8 +12,8 @@ export const useForm = (controls: any) => {
 
   const updateForm = (formControls: any) => {
     setForm((prevState) => {
-      const controls = { ...prevState.controls, ...formControls };
-      return { controls, valid: isValidForm(controls) };
+      const updatedControls = { ...prevState.controls, ...formControls };
+      return { controls: updatedControls, valid: isValidForm(updatedControls) };
     });
   };
 

@@ -1,14 +1,3 @@
-# React Use Form
-Small Reactjs hook to manage form controls
-
-## Getting Started
-npm install react-use-form-control
-
-**Requires react@^16.13.1 as a peer dependency.**
-
-
-## Example 
-
 import React from 'react';
 import { useForm } from 'react-use-form-control';
 
@@ -32,5 +21,3 @@ const UserComponent = () => {
     </form>
   );
 };
-
-

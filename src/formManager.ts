@@ -9,8 +9,7 @@ export const createForm = (formControls: any = {}): Form => {
       const formControl: FormControl = formControls[key];
       const { value, validators = [], error = false, errorMessage = '' } = formControl;
       const control = { value, validators, error, errorMessage };
-      for (let i = 0; i < control.validators.length; i++) {
-        const validator = control.validators[i];
+      for (const validator of control.validators) {
         if (!validator.validatorfunction.call(controls, control.value)) {
           control.error = true;
           control.errorMessage = validator.errorMessage;

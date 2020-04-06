@@ -2,6 +2,8 @@ const hasValue = (value: any) => {
   return !(value === '' || value === undefined || value === null);
 };
 
+const equals = (value1: any, value2: any) => value1 === value2;
+
 export const controls: any = {
   test: {
     value: '',
@@ -28,7 +30,7 @@ export const dependenControls: any = {
     value: '',
     validators: [
       {
-        validatorfunction: function (value: any) {
+        validatorfunction(value: any) {
           const obj: any = this;
           return obj.control1.value === value;
         },

@@ -46,6 +46,7 @@ Where the controls object should be a object container of type FormControl.
 
 ####Basic usage
 The following code demonstrates a basic usage example:
+
 **input[name=]** is required, without the input property name is hard to identified the control on input event.
     
 	import React from "react";
@@ -121,7 +122,7 @@ task: {
               }
 ```
 
-validator property is a array of validators functions, so you can define many validation function as you required.
+The **validator** property is a array of validators functions, so you can define many validation function as you required.
 
     
 	import React from "react";
@@ -264,3 +265,4 @@ const Todo = () => {
 export default Todo;
 
 ```
+

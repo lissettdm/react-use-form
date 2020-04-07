@@ -57,9 +57,8 @@ export const useForm = (controls: FormControlObject) => {
   };
 
   const removeFormControl = (name: string) => {
-    let currentControls: any = { ...form.controls };
+    const currentControls: any = { ...form.controls };
     delete currentControls[name];
-    console.log('testss', currentControls);
     try {
       setForm({ controls: currentControls, valid: isValidForm(currentControls) });
     } catch (error) {

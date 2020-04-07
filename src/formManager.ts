@@ -1,8 +1,8 @@
 import { FormControl } from './formControl';
-import { Form } from './form';
+import { Form, FormControlObject } from './form';
 import { ControlValidator } from './controlValidator';
 
-export const createForm = (formControls: any = {}): Form => {
+export const createForm = (formControls: FormControlObject = {}): Form => {
   const controls = Object.create({});
   try {
     Object.keys(formControls).forEach((key: string) => {
@@ -27,8 +27,8 @@ export const createForm = (formControls: any = {}): Form => {
   }
 };
 
-export function isValidForm(controls: any) {
-  const isValid = !Object.keys(controls).find((prop: any) =>
+export function isValidForm(controls: FormControlObject) {
+  const isValid: boolean = !Object.keys(controls).find((prop: any) =>
     controls[prop].validators.some(
       (validator: ControlValidator) => validator.validatorfunction.call(controls, controls[prop].value) === false,
     ),

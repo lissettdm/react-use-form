@@ -1,4 +1,4 @@
-const hasValue = (value: any) => {
+export const hasValue = (value: any) => {
   return !(value === '' || value === undefined || value === null);
 };
 

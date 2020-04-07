@@ -2,8 +2,6 @@ import { createForm } from '../formManager';
 import { Form } from '../form';
 import { controls, dependenControls } from './models/controls';
 
-
-
 test('Create Form function - invalid form with invalid property value', () => {
   const form: Form = createForm(controls);
   expect(form).toBeTruthy();

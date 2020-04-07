@@ -2,15 +2,16 @@ import { FormControl } from './formControl';
 import { useState, useEffect } from 'react';
 import { createForm, isValidForm } from './formManager';
 import { ControlValidator } from './controlValidator';
+import { FormControlObject, Form } from './form';
 
-export const useForm = (controls: any) => {
+export const useForm = (controls: FormControlObject) => {
   const [form, setForm] = useState(createForm(controls));
 
   useEffect(() => {
     updateForm({});
   }, []);
 
-  const updateForm = (formControls: any) => {
+  const updateForm = (formControls: FormControlObject) => {
     setForm((prevState) => {
       const updatedControls = { ...prevState.controls, ...formControls };
       return { controls: updatedControls, valid: isValidForm(updatedControls) };
@@ -47,9 +48,31 @@ export const useForm = (controls: any) => {
     updateForm({ [key]: { ...form.controls[key], value } });
   };
 
+  const resetForm = () => {
+    updateForm({ ...controls });
+  };
+
+  const addFormControl = (name: string, control: FormControl) => {
+    updateForm({ [name]: control });
+  };
+
+  const removeFormControl = (name: string) => {
+    let currentControls: any = { ...form.controls };
+    delete currentControls[name];
+    console.log('testss', currentControls);
+    try {
+      setForm({ controls: currentControls, valid: isValidForm(currentControls) });
+    } catch (error) {
+      throw new Error(`Unable to remove control. Maybe has dependency relation with other controls: ${error}`);
+    }
+  };
+
   return {
     form,
     handleControlEvent,
     setFormControl,
+    resetForm,
+    addFormControl,
+    removeFormControl,
   };
 };

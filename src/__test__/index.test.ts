@@ -1,6 +1,6 @@
 import { renderHook, act } from '@testing-library/react-hooks';
 import { useForm } from '..';
-import { controls, dependenControls } from './models/controls';
+import { controls, dependenControls, hasValue } from './models/controls';
 
 test('Should use useForm hook', () => {
   const { result } = renderHook(() => useForm(controls));
@@ -33,15 +33,92 @@ test('Should use useForm hook -  dependent controls', () => {
 });
 
 test('Should update form state - on handleControlEvent', () => {
-    const { result } = renderHook(() => useForm(dependenControls));
-  
-    act(() => {
-      result.current.handleControlEvent({
-        target: { name: 'control2', value: 'should match' },
-      });
+  const { result } = renderHook(() => useForm(dependenControls));
+
+  act(() => {
+    result.current.handleControlEvent({
+      target: { name: 'control2', value: 'should match' },
     });
-    expect(result.current.form.controls.control2.value).toEqual('should match');
-    expect(result.current.form.controls.control2.error).toBeFalsy();
-    expect(result.current.form.controls.control2.errorMessage).toBe('');
-    expect(result.current.form.valid).toBeTruthy();
   });
+  expect(result.current.form.controls.control2.value).toEqual('should match');
+  expect(result.current.form.controls.control2.error).toBeFalsy();
+  expect(result.current.form.controls.control2.errorMessage).toBe('');
+  expect(result.current.form.valid).toBeTruthy();
+});
+
+test('Should reset form state', () => {
+  const { result } = renderHook(() => useForm(dependenControls));
+  expect(result.current.form.controls).toMatchObject(dependenControls);
+  expect(result.current.form.valid).toBeFalsy();
+
+  act(() => {
+    result.current.handleControlEvent({
+      target: { name: 'control2', value: 'should match' },
+    });
+  });
+  expect(result.current.form.controls.control2.value).toEqual('should match');
+  expect(result.current.form.valid).toBeTruthy();
+
+  act(() => {
+    result.current.resetForm();
+  });
+  expect(result.current.form.controls).toMatchObject(dependenControls);
+  expect(result.current.form.valid).toBeFalsy();
+});
+
+test('Should add new form control', () => {
+  const { result } = renderHook(() => useForm(controls));
+  expect(result.current.form.controls).toMatchObject(controls);
+  expect(result.current.form.valid).toBeFalsy();
+
+  act(() => {
+    result.current.handleControlEvent({
+      target: { name: 'test', value: 'Form Test' },
+    });
+  });
+  expect(result.current.form.valid).toBeTruthy();
+
+  act(() => {
+    result.current.addFormControl('coverage', {
+      value: '',
+      validators: [
+        {
+          validatorfunction: (val) => val !== '',
+          errorMessage: 'coverage is required',
+        },
+      ],
+    });
+  });
+  expect(result.current.form.valid).toBeFalsy();
+});
+
+test('Should remove form control', () => {
+  const { result } = renderHook(() => useForm(dependenControls));
+  expect(result.current.form.controls).toMatchObject(dependenControls);
+  expect(result.current.form.valid).toBeFalsy();
+
+  act(() => {
+    result.current.handleControlEvent({
+      target: { name: 'control2', value: 'should match' },
+    });
+  });
+
+  expect(result.current.form.valid).toBeTruthy();
+
+  act(() => {
+    result.current.removeFormControl('control2');
+  });
+  expect(result.current.form.controls).toMatchObject({
+    control1: {
+      value: 'should match',
+      error: false,
+      errorMessage: '',
+      validators: [
+        {
+          validatorfunction: hasValue,
+          errorMessage: 'Control1 is required',
+        },
+      ],
+    },
+  });
+});

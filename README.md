@@ -22,6 +22,9 @@ Where the controls object should be a object container of type FormControl.
 |  form |  type of Form |
 |  handleControlEvent |  Control Event (Example: onChange, onClick, etc..) |
 | setFormControl | Sometimes is necessary to update control value without dispatch a control event. Update specific control passing key and value |
+| resetForm | Reset the controls to the initial state|
+|addFormControl | Add new control, args name, control type of FormControl|
+|removeFormControl | Remove control, if has relation with other control an error will be throw|
 
 
 #####Form
@@ -48,7 +51,7 @@ Where the controls object should be a object container of type FormControl.
 The following code demonstrates a basic usage example:
 
 **input[name=]** is required, without the input property name is hard to identified the control on input event.
-    
+```javascript
 	import React from "react";
     import { useForm } from "react-use-form-control";
     
@@ -89,7 +92,7 @@ The following code demonstrates a basic usage example:
     };
     
     export default Todo;
-    
+```
 
 ####Using validators
 This example apply a validation function (type ValidatorFunction = (value: any) => boolean), one for each control.
@@ -124,7 +127,7 @@ task: {
 
 The **validator** property is a array of validators functions, so you can define many validation function as you required.
 
-    
+```javascript
 	import React from "react";
     import { useForm } from "react-use-form-control";
     const isRequired = (value) => {
@@ -188,7 +191,7 @@ The **validator** property is a array of validators functions, so you can define
     };
     
     export default Todo;
-    
+```
 
 
 

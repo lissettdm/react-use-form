@@ -1,6 +1,6 @@
 # React Use Form
 
-Small Reactjs hook to manage form controls
+Small Reactjs hook to manage form controls. Easy to use, without extra functions that you will never use. Based on validations functions this hook will keep updated de form and it's controls (controls, valid, value), even if you add new controls or remove somes.
 
 ## Getting Started
 
@@ -11,7 +11,8 @@ npm install react-use-form-control
 ## Usage
     import { useForm } from "react-use-form-control";
 	
-    const { form, handleControlEvent, setFormControl } = useForm(controls);
+	// controls: { name: { value, validators }}, for more details see validations functions.
+    const { form } = useForm(controls);
     
 
 Where the controls object should be a object container of type FormControl.
@@ -21,7 +22,7 @@ Where the controls object should be a object container of type FormControl.
 | ------------ | ------------ |
 |  form |  type of Form |
 |  handleControlEvent |  Control Event (Example: onChange, onClick, etc..) |
-| setFormControl | Sometimes is necessary to update control value without dispatch a control event. Update specific control passing key and value |
+| setFormControlValue | Sometimes is necessary to update control value without dispatch a control event. Update specific control passing key and value |
 | resetForm | Reset the controls to the initial state|
 |addFormControl | Add new control, args name, control type of FormControl|
 |removeFormControl | Remove control, if has relation with other control an error will be throw|
@@ -32,6 +33,7 @@ Where the controls object should be a object container of type FormControl.
 | ------------ | ------------ |
 |  controls |  {[key: string]: FormControl} |
 |  valid |  Boolean (optional) |
+|  value |  Object {[controlName: string]: value} |
 
 #####FormControl
 |  Property |  Type |
@@ -95,7 +97,8 @@ The following code demonstrates a basic usage example:
 ```
 
 ####Using validators
-This example apply a validation function (type ValidatorFunction = (value: any) => boolean), one for each control.
+Lets create a control named task, the task value is required, so we add a validation function to this control. If validation function return false, form.valid will be false.
+This example apply a validation function (type ValidatorFunction = (value: any) => boolean).
 ```javascript
  const controls = {
               task: {
@@ -110,7 +113,7 @@ This example apply a validation function (type ValidatorFunction = (value: any) 
         }
 
 ```
-This validation function will be execute on any control change, if the result is false, the control will be equal to:
+This validation function will be execute allways the control changes, if the result is false, the control will be equal to:
 ```javascript
 task: {
                 value: "",
@@ -125,6 +128,7 @@ task: {
               }
 ```
 
+You can access all the control properties, example: form.controls.task.error.
 The **validator** property is a array of validators functions, so you can define many validation function as you required.
 
 ```javascript
@@ -196,7 +200,8 @@ The **validator** property is a array of validators functions, so you can define
 
 
 ####Validation function depending on other form control value
-In lunchOnlyForJohn  function the **this** scope is the controls object.
+Many times we have dependencies between controls and we need apply validations based on that.
+For this example we will create a lunchOnlyForJohn function, the **this** scope in the validations functions is the form controls.
 ```javascript
 import React from "react";
 import { useForm } from "react-use-form-control";
@@ -268,4 +273,5 @@ const Todo = () => {
 export default Todo;
 
 ```
+
 

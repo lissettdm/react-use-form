@@ -1,51 +1,34 @@
 import { FormControl } from './formControl';
 import { useState, useEffect } from 'react';
-import { createForm, isValidForm } from './formManager';
 import { ControlValidator } from './controlValidator';
 import { FormControlObject, Form } from './form';
 
 export const useForm = (controls: FormControlObject) => {
-  const [form, setForm] = useState(createForm(controls));
-
-  useEffect(() => {
-    updateForm({});
-  }, []);
+  const [form, setForm] = useState(new Form(controls));
 
   const updateForm = (formControls: FormControlObject) => {
     setForm((prevState) => {
       const updatedControls = { ...prevState.controls, ...formControls };
-      return { controls: updatedControls, valid: isValidForm(updatedControls) };
+      return new Form(updatedControls);
     });
   };
 
   const handleControlEvent = (event: any) => {
     const { value, name, type, checked } = event.target;
     if (name) {
-      let control = { ...form.controls[name] };
-      control.value = type === 'checkbox' ? checked : value;
-      control = manageControl(control);
+      const validators: ControlValidator[] = form.controls[name].validators;
+      const _value = type === 'checkbox' ? checked : value;
+      const control = new FormControl(null, _value, validators);
       updateForm({ [name]: control });
+    } else {
+      throw new Error('Missing property name. <input *name="prop_name"/>')
     }
   };
 
-  /** for this.  use purpose */
-  function manageControl(control: FormControl) {
-    if (Array.isArray(control.validators)) {
-      control.error = false;
-      control.errorMessage = '';
-      const validation = control.validators.find(
-        (validator: ControlValidator) => !validator.validatorfunction.call(form.controls, control.value),
-      );
-      if (validation) {
-        control.error = true;
-        control.errorMessage = validation.errorMessage;
-      }
-    }
-    return control;
-  }
 
-  const setFormControl = (key: any, value: any) => {
-    updateForm({ [key]: { ...form.controls[key], value } });
+  const setFormControlValue = (key: any, value: any) => {
+    const validators = form.controls[key].validators;
+    updateForm({ [key]: new FormControl(null, value, validators)});
   };
 
   const resetForm = () => {
@@ -60,7 +43,7 @@ export const useForm = (controls: FormControlObject) => {
     const currentControls: any = { ...form.controls };
     delete currentControls[name];
     try {
-      setForm({ controls: currentControls, valid: isValidForm(currentControls) });
+      setForm(new Form(currentControls));
     } catch (error) {
       throw new Error(`Unable to remove control. Maybe has dependency relation with other controls: ${error}`);
     }
@@ -69,7 +52,7 @@ export const useForm = (controls: FormControlObject) => {
   return {
     form,
     handleControlEvent,
-    setFormControl,
+    setFormControlValue,
     resetForm,
     addFormControl,
     removeFormControl,

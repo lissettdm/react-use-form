@@ -1,6 +1,7 @@
 import { renderHook, act } from '@testing-library/react-hooks';
 import { useForm } from '..';
 import { controls, dependenControls, hasValue } from './models/controls';
+import { FormControl } from '../formControl';
 
 test('Should use useForm hook', () => {
   const { result } = renderHook(() => useForm(controls));
@@ -79,15 +80,15 @@ test('Should add new form control', () => {
   expect(result.current.form.valid).toBeTruthy();
 
   act(() => {
-    result.current.addFormControl('coverage', {
-      value: '',
-      validators: [
+    result.current.addFormControl(
+      'coverage',
+      new FormControl(null, '', [
         {
           validatorfunction: (val) => val !== '',
           errorMessage: 'coverage is required',
         },
-      ],
-    });
+      ]),
+    );
   });
   expect(result.current.form.valid).toBeFalsy();
 });

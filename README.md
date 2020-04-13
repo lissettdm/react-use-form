@@ -1,6 +1,6 @@
 # React Use Form
 
-Small Reactjs hook to manage form controls. Easy to use, without extra functions that you will never use. Based on validations functions this hook will keep updated de form and it's controls (controls, valid, value), even if you add new controls or remove somes.
+Small Reactjs hook to manage form controls. Easy to use, without extra functions that you will never use. Based on validations functions this hook will keep updated the form and it's controls (controls, valid, value), even if you add new controls or remove somes.
 
 ## Getting Started
 

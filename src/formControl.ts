@@ -6,7 +6,7 @@ export class FormControl {
   private _touched: boolean;
   private readonly scope: any = {};
 
-  constructor(scope: any = {}, value: any, validators: ControlValidator[] = [], touched: boolean) {
+  constructor(scope: any = {}, value: any, validators: ControlValidator[] = [], touched: boolean = false) {
     this._value = value;
     this._validators = validators;
     this._touched = touched;

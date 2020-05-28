@@ -28,8 +28,8 @@ export class Form {
     const controls = Object.create({});
     try {
       Object.keys(formControls).forEach((key: string) => {
-        const { value, validators = [] } = formControls[key];
-        const control: FormControl = new FormControl(formControls, value, validators);
+        const { value, validators = [], touched } = formControls[key];
+        const control: FormControl = new FormControl(formControls, value, validators, touched);
         controls[key] = control;
       });
       return controls;

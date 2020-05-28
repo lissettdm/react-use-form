@@ -17,38 +17,6 @@ npm install react-use-form-control
 
 Where the controls object should be a object container of type FormControl.
 
-#####useForm
-|  Property |  Description |
-| ------------ | ------------ |
-|  form |  type of Form |
-|  handleControlEvent |  Control Event (Example: onChange, onClick, etc..) |
-| setFormControlValue | Sometimes is necessary to update control value without dispatch a control event. Update specific control passing key and value |
-| resetForm | Reset the controls to the initial state|
-|addFormControl | Add new control, args name, control type of FormControl|
-|removeFormControl | Remove control, if has relation with other control an error will be throw|
-
-
-#####Form
-|  Property |  Type |
-| ------------ | ------------ |
-|  controls |  {[key: string]: FormControl} |
-|  valid |  Boolean (optional) |
-|  value |  Object {[controlName: string]: value} |
-
-#####FormControl
-|  Property |  Type |
-| ------------ | ------------ |
-|  value |  any | 
-|  error |  Boolean (optional) |
-|  errorMessage| string (optional)|
-|  validators | Array of ControlValidator (optional)|
-
-#####ControlValidator
-|  Property |  Type |
-| ------------ | ------------ |
-|  validatorfunction | type ValidatorFunction = (value: any) => boolean;  |
-|  errorMessage |   string |
-
 ####Basic usage
 The following code demonstrates a basic usage example:
 
@@ -271,6 +239,45 @@ const Todo = () => {
 };
 
 export default Todo;
+
+
+#####useForm
+
+|  Property |  Description |
+| ------------ | ------------ |
+|  form |  type of Form |
+|  handleControlEvent |  Control Event (Example: onChange, onClick, etc..) |
+| setFormControlValue | Sometimes is necessary to update control value without dispatch a control event. Update specific control passing key and value |
+| resetForm | Reset the controls to the initial state|
+|addFormControl | Add new control, args name, control type of FormControl|
+|removeFormControl | Remove control, if has relation with other control an error will be throw|
+
+
+#####Form
+
+|  Property |  Type |
+| ------------ | ------------ |
+|  controls |  {[key: string]: FormControl} |
+|  valid |  Boolean (optional) |
+|  value |  Object {[controlName: string]: value} |
+
+#####FormControl
+
+|  Property |  Type |
+| ------------ | ------------ |
+|  value |  any | 
+|  error |  Boolean (optional) |
+|  errorMessage| string (optional)|
+|  validators | Array of ControlValidator (optional)|
+
+#####ControlValidator
+
+|  Property |  Type |
+| ------------ | ------------ |
+|  validatorfunction | type ValidatorFunction = (value: any) => boolean;  |
+|  errorMessage |   string |
+
+
 
 ```
 

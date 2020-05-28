@@ -1,5 +1,5 @@
-import {ValidatorFunction} from './types';
+import { ValidatorFunction } from './types';
 export interface ControlValidator {
-    validatorfunction: ValidatorFunction;
-    errorMessage: string;
+  validatorfunction: ValidatorFunction;
+  errorMessage: string;
 }

@@ -3,11 +3,11 @@ import { controls, dependenControls, hasValue } from './models/controls';
 import { FormControl } from '../formControl';
 
 let _controls: FormControlObject;
-let _dependenControls: FormControlObject;
+let _dependentControls: FormControlObject;
 describe('Form', () => {
   beforeEach(() => {
     _controls = controls;
-    _dependenControls = dependenControls;
+    _dependentControls = dependenControls;
   });
 
   test('Create Form function - invalid form with invalid property value', () => {
@@ -36,7 +36,7 @@ describe('Form', () => {
   });
 
   test('Create Form function - validation with dependent controls', () => {
-    const form: Form = new Form(_dependenControls);
+    const form: Form = new Form(_dependentControls);
     expect(form).toBeTruthy();
     const formcontrols: any = form.controls;
     expect(formcontrols.control2.error).toBeTruthy();

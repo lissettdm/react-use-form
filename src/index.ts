@@ -18,7 +18,7 @@ export const useForm = (controls: FormControlObject) => {
     if (name) {
       const validators: ControlValidator[] = form.controls[name].validators;
       const _value = type === 'checkbox' ? checked : value;
-      const control = new FormControl(null, _value, validators);
+      const control = new FormControl(null, _value, validators, true);
       updateForm({ [name]: control });
     } else {
       throw new Error('Missing property name. <input *name="prop_name"/>')
@@ -28,7 +28,7 @@ export const useForm = (controls: FormControlObject) => {
 
   const setFormControlValue = (key: any, value: any) => {
     const validators = form.controls[key].validators;
-    updateForm({ [key]: new FormControl(null, value, validators)});
+    updateForm({ [key]: new FormControl(null, value, validators, true)});
   };
 
   const resetForm = () => {

@@ -3,12 +3,17 @@ import { ControlValidator } from './controlValidator';
 export class FormControl {
   private _value: any;
   private _validators: ControlValidator[];
+  private _touched: boolean;
   private readonly scope: any = {};
 
-  constructor(scope: any = {}, value: any, validators: ControlValidator[] = []) {
+  constructor(scope: any = {}, value: any, validators: ControlValidator[] = [], touched: boolean) {
     this._value = value;
     this._validators = validators;
+    this._touched = touched;
     this.scope = scope;
+  }
+  get touched(): boolean {
+    return this._touched;
   }
 
   get value(): any {

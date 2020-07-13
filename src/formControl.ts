@@ -1,31 +1,33 @@
-import { ControlValidator } from './controlValidator';
+import { IFormControl, ControlValidator, IForm } from './interfaces';
+import { hasProp, ownKeyProp, defineProp } from './formkits.js/proxykits';
 
-export class FormControl {
-  private _value: any;
-  private _validators: ControlValidator[];
-  private _touched: boolean;
-  private readonly scope: any = {};
+export class FormControlTarget {
+  private _formControl: IFormControl;
 
   constructor(scope: any = {}, value: any, validators: ControlValidator[] = [], touched: boolean = false) {
-    this._value = value;
-    this._validators = validators;
-    this._touched = touched;
-    this.scope = scope;
+    this._formControl = {
+      scope,
+      value,
+      validators,
+      touched,
+      error: false,
+      errorMessage: '',
+    };
   }
   get touched(): boolean {
-    return this._touched;
+    return this._formControl.touched;
   }
 
   get value(): any {
-    return this._value;
+    return this._formControl.value;
   }
   get validators(): ControlValidator[] {
-    return this._validators;
+    return this._formControl.validators;
   }
 
   get error(): boolean {
     for (const validator of this.validators) {
-      if (!validator.validatorfunction.call(this.scope, this._value)) {
+      if (!validator.validatorfunction.call(this._formControl.scope, this.value)) {
         return true;
       }
     }
@@ -33,11 +35,31 @@ export class FormControl {
   }
   get errorMessage(): string {
     for (const validator of this.validators) {
-      if (!validator.validatorfunction.call(this.scope, this._value)) {
+      if (!validator.validatorfunction.call(this._formControl.scope, this.value)) {
         return validator.errorMessage;
       }
     }
     return '';
   }
-
 }
+
+const formControlHandler = {
+  construct(target: any, arg: any) {
+    const {touched, value, error, errorMessage, validators} = new target(...arg);
+    return {touched, value, error, errorMessage, validators};
+  },
+  get: function (target: any, prop: string) {
+    if (prop in target) {
+      return target[prop];
+    }
+    throw new Error(`Invalid property ${prop}`);
+  },
+  set(_: any, prop: string, __: any) {
+    throw new Error(`Cannot set property value of ${prop}`);
+  },
+  ...hasProp,
+  ...ownKeyProp,
+  ...defineProp
+};
+
+export const FormControl = new Proxy(FormControlTarget, formControlHandler);

@@ -1,35 +1,35 @@
 import { FormControl } from './formControl';
-import { ControlValidator } from './controlValidator';
-
-export interface FormControlObject {
-  [key: string]: FormControl;
-}
+import { ControlValidator, IForm, IFormControl, IFormValue, IControls } from './interfaces';
 
 export class Form {
-  private _controls: FormControlObject;
+  private _form: IForm;
 
-  constructor(_controls: FormControlObject = {}) {
-    this._controls = this.formatControls(_controls);
+  constructor(_controls: IControls = {}) {
+    this._form = {
+      controls: this._formatControls(_controls),
+      valid: this._isValidForm(_controls),
+      value: this._getValues(_controls),
+    };
   }
 
-  get controls() {
-    return this._controls;
+  get controls(): IControls {
+    return this._form.controls;
   }
 
   get valid(): boolean {
-    return this.isValidForm();
+    return this._form.valid;
   }
 
-  get value(): any {
-    return this.getValues();
+  get value(): IFormValue {
+    return this._form.value;
   }
 
-  private formatControls = (formControls: FormControlObject = {}): FormControlObject => {
+  private _formatControls = (formControls: IControls = {}): IControls => {
     const controls = Object.create({});
     try {
       Object.keys(formControls).forEach((key: string) => {
         const { value, validators = [], touched } = formControls[key];
-        const control: FormControl = new FormControl(formControls, value, validators, touched);
+        const control: IFormControl = new FormControl(formControls, value, validators, touched);
         controls[key] = control;
       });
       return controls;
@@ -38,20 +38,20 @@ export class Form {
     }
   };
 
-  private isValidForm() {
-    const isValid: boolean = !Object.keys(this.controls).find((prop: any) =>
-      this.controls[prop].validators.some(
-        (validator: ControlValidator) =>
-          validator.validatorfunction.call(this.controls, this.controls[prop].value) === false,
+  private _isValidForm(_controls: IControls) {
+    const isValid: boolean = !Object.keys(_controls).find((prop: any) =>
+      _controls[prop].validators.some(
+        (validator: ControlValidator) => validator.validatorfunction.call(_controls, _controls[prop].value) === false,
       ),
     );
     return isValid;
   }
 
-  private getValues() {
-    return Object.keys(this.controls).reduce((obj: FormControlObject, prop) => {
-      obj[prop] = this.controls[prop].value;
+  private _getValues(_controls: IControls) {
+    return Object.keys(_controls).reduce((obj: IControls, prop) => {
+      obj[prop] = _controls[prop].value;
       return obj;
     }, {});
   }
 }
+

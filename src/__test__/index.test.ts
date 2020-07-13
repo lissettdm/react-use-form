@@ -84,7 +84,7 @@ test('Should add new form control', () => {
       'coverage',
       new FormControl(null, '', [
         {
-          validatorfunction: (val) => val !== '',
+          validatorfunction: (val: any) => val !== '',
           errorMessage: 'coverage is required',
         },
       ]),

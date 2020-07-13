@@ -1,13 +1,14 @@
 import { FormControl } from './formControl';
-import { useState, useEffect } from 'react';
-import { ControlValidator } from './controlValidator';
-import { FormControlObject, Form } from './form';
+import { useState } from 'react';
+import { ControlValidator, IControls, IFormControl, IForm } from './interfaces';
+import { Form } from './form';
+import { hasProp, ownKeyProp, defineProp } from './formkits.js/proxykits';
 
-export const useForm = (controls: FormControlObject) => {
+export const useForm = (controls: IControls) => {
   const [form, setForm] = useState(new Form(controls));
 
-  const updateForm = (formControls: FormControlObject) => {
-    setForm((prevState) => {
+  const updateForm = (formControls: IControls) => {
+    setForm((prevState: IForm) => {
       const updatedControls = { ...prevState.controls, ...formControls };
       return new Form(updatedControls);
     });
@@ -21,21 +22,20 @@ export const useForm = (controls: FormControlObject) => {
       const control = new FormControl(null, _value, validators, true);
       updateForm({ [name]: control });
     } else {
-      throw new Error('Missing property name. <input *name="prop_name"/>')
+      throw new Error('Missing property name. <input *name="prop_name"/>');
     }
   };
 
-
   const setFormControlValue = (key: any, value: any) => {
     const validators = form.controls[key].validators;
-    updateForm({ [key]: new FormControl(null, value, validators, true)});
+    updateForm({ [key]: new FormControl(null, value, validators, true) });
   };
 
   const resetForm = () => {
     updateForm({ ...controls });
   };
 
-  const addFormControl = (name: string, control: FormControl) => {
+  const addFormControl = (name: string, control: IFormControl) => {
     updateForm({ [name]: control });
   };
 
@@ -50,11 +50,30 @@ export const useForm = (controls: FormControlObject) => {
   };
 
   return {
-    form,
+    form: new Proxy(form, formHandler),
     handleControlEvent,
     setFormControlValue,
     resetForm,
     addFormControl,
     removeFormControl,
   };
+};
+
+const formHandler = {
+  construct(target: any, arg: any) {
+    let { controls, value, valid } = new target(...arg);
+    return { controls, value, valid };
+  },
+  get: function (target: any, prop: string) {
+    if (prop in target) {
+      return target[prop];
+    }
+    throw new Error(`Invalid property ${prop}`);
+  },
+  set(_: any, prop: string, __: any) {
+    throw new Error(`Cannot set property value of ${prop}`);
+  },
+  ...hasProp,
+  ...ownKeyProp,
+  ...defineProp,
 };

@@ -1,9 +1,10 @@
-import { Form, FormControlObject } from '../form';
+import { Form } from '../form';
 import { controls, dependenControls, hasValue } from './models/controls';
 import { FormControl } from '../formControl';
+import { IControls, IForm } from '../interfaces';
 
-let _controls: FormControlObject;
-let _dependentControls: FormControlObject;
+let _controls: IControls;
+let _dependentControls: IControls;
 describe('Form', () => {
   beforeEach(() => {
     _controls = controls;
@@ -11,7 +12,7 @@ describe('Form', () => {
   });
 
   test('Create Form function - invalid form with invalid property value', () => {
-    const form: Form = new Form(_controls);
+    const form: IForm = new Form(_controls);
     expect(form).toBeTruthy();
     const formcontrols = form.controls;
     expect(formcontrols.test.error).toBeTruthy();
@@ -20,7 +21,7 @@ describe('Form', () => {
   });
 
   test('Create Form function - valid form with valid property value', () => {
-    const form: Form = new Form({
+    const form: IForm = new Form({
       test: new FormControl(null, 'create form test', [
         {
           validatorfunction: hasValue,
@@ -36,7 +37,7 @@ describe('Form', () => {
   });
 
   test('Create Form function - validation with dependent controls', () => {
-    const form: Form = new Form(_dependentControls);
+    const form: IForm = new Form(_dependentControls);
     expect(form).toBeTruthy();
     const formcontrols: any = form.controls;
     expect(formcontrols.control2.error).toBeTruthy();
@@ -45,12 +46,12 @@ describe('Form', () => {
   });
 
   test('Create Form function - non arguments', () => {
-    const form: Form = new Form();
+    const form: IForm = new Form();
     expect(form).toMatchObject({ controls: {}, valid: true });
   });
 
   test('Should return form value', () => {
-    const form: Form = new Form(_controls);
+    const form: IForm = new Form(_controls);
     expect(form.value).toMatchObject({ test: '' });
   });
 });

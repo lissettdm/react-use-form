@@ -61,10 +61,10 @@ export const useForm = (controls: IControls) => {
 
 const formHandler = {
   construct(target: any, arg: any) {
-    let { controls, value, valid } = new target(...arg);
+    const { controls, value, valid } = new target(...arg);
     return { controls, value, valid };
   },
-  get: function (target: any, prop: string) {
+  get(target: any, prop: string) {
     if (prop in target) {
       return target[prop];
     }

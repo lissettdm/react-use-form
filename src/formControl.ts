@@ -48,7 +48,7 @@ const formControlHandler = {
     const { touched, value, error, errorMessage, validators } = new target(...arg);
     return { touched, value, error, errorMessage, validators };
   },
-  get: function (target: any, prop: string) {
+  get(target: any, prop: string) {
     if (prop in target) {
       return target[prop];
     }

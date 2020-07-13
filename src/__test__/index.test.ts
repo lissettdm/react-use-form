@@ -113,7 +113,7 @@ test('Should throw error while getting undefined property', () => {
   let err = null;
 
   try {
-    console.log(result.current.form.undefinedProp);
+    expect(result.current.form.undefinedProp).toBeFalsy();
   } catch (error) {
     err = error;
   }

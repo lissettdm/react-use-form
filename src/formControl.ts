@@ -1,5 +1,5 @@
-import { IFormControl, ControlValidator, IForm } from './interfaces';
-import { hasProp, ownKeyProp, defineProp } from './formkits.js/proxykits';
+import { IFormControl, ControlValidator } from './interfaces';
+import { baseHandler } from './formkits.js/proxykits';
 
 export class FormControlTarget {
   private _formControl: IFormControl;
@@ -48,18 +48,7 @@ const formControlHandler = {
     const { touched, value, error, errorMessage, validators } = new target(...arg);
     return { touched, value, error, errorMessage, validators };
   },
-  get(target: any, prop: string) {
-    if (prop in target) {
-      return target[prop];
-    }
-    throw new Error(`Invalid property ${prop}`);
-  },
-  set(_: any, prop: string, __: any) {
-    throw new Error(`Cannot set property value of ${prop}`);
-  },
-  ...hasProp,
-  ...ownKeyProp,
-  ...defineProp,
+  ...baseHandler,
 };
 
 export const FormControl = new Proxy(FormControlTarget, formControlHandler);

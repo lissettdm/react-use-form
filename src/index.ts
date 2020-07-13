@@ -2,7 +2,7 @@ import { FormControl } from './formControl';
 import { useState } from 'react';
 import { ControlValidator, IControls, IFormControl, IForm } from './interfaces';
 import { Form } from './form';
-import { hasProp, ownKeyProp, defineProp } from './formkits.js/proxykits';
+import { baseHandler } from './formkits.js/proxykits';
 
 export const useForm = (controls: IControls) => {
   const [form, setForm] = useState(new Form(controls));
@@ -50,7 +50,7 @@ export const useForm = (controls: IControls) => {
   };
 
   return {
-    form: new Proxy(form, formHandler),
+    form: new Proxy(clearForm(form), formHandler),
     handleControlEvent,
     setFormControlValue,
     resetForm,
@@ -59,21 +59,25 @@ export const useForm = (controls: IControls) => {
   };
 };
 
+const clearForm = (form: any)=> {
+  const { controls, value, valid } = form;
+  return { controls, value, valid };
+}
+
 const formHandler = {
-  construct(target: any, arg: any) {
-    const { controls, value, valid } = new target(...arg);
-    return { controls, value, valid };
-  },
+  ...baseHandler,
   get(target: any, prop: string) {
     if (prop in target) {
+      if(prop === "controls") {
+        let o: IControls = {};
+        Object.keys(target[prop]).forEach(key => {
+          o[key] = new Proxy(target[prop][key], baseHandler);
+        });
+        return new Proxy(o, baseHandler);
+      }
       return target[prop];
     }
     throw new Error(`Invalid property ${prop}`);
   },
-  set(_: any, prop: string, __: any) {
-    throw new Error(`Cannot set property value of ${prop}`);
-  },
-  ...hasProp,
-  ...ownKeyProp,
-  ...defineProp,
 };
+

@@ -19,3 +19,18 @@ export const defineProp = {
   },
 };
 
+export const baseHandler = {
+  get(target: any, prop: string) {
+    if (prop in target) {
+      return target[prop];
+    }
+    throw new Error(`Invalid property ${prop}`);
+  },
+  set(_: any, prop: string, __: any) {
+    throw new Error(`Cannot set property value of ${prop}`);
+  },
+  ...hasProp,
+  ...ownKeyProp,
+  ...defineProp,
+};
+

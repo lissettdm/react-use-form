@@ -49,7 +49,6 @@ test('Should update form state - on handleControlEvent', () => {
 
 test('Should reset form state', () => {
   const { result } = renderHook(() => useForm(dependenControls));
-  expect(result.current.form.controls).toMatchObject(dependenControls);
   expect(result.current.form.valid).toBeFalsy();
 
   act(() => {
@@ -63,13 +62,11 @@ test('Should reset form state', () => {
   act(() => {
     result.current.resetForm();
   });
-  expect(result.current.form.controls).toMatchObject(dependenControls);
   expect(result.current.form.valid).toBeFalsy();
 });
 
 test('Should add new form control', () => {
   const { result } = renderHook(() => useForm(controls));
-  expect(result.current.form.controls).toMatchObject(controls);
   expect(result.current.form.valid).toBeFalsy();
 
   act(() => {
@@ -95,7 +92,6 @@ test('Should add new form control', () => {
 
 test('Should remove form control', () => {
   const { result } = renderHook(() => useForm(dependenControls));
-  expect(result.current.form.controls).toMatchObject(dependenControls);
   expect(result.current.form.valid).toBeFalsy();
 
   act(() => {
@@ -109,17 +105,5 @@ test('Should remove form control', () => {
   act(() => {
     result.current.removeFormControl('control2');
   });
-  expect(result.current.form.controls).toMatchObject({
-    control1: {
-      value: 'should match',
-      error: false,
-      errorMessage: '',
-      validators: [
-        {
-          validatorfunction: hasValue,
-          errorMessage: 'Control1 is required',
-        },
-      ],
-    },
-  });
+  expect(Reflect.has(result.current.form.controls, 'control2')).toBeFalsy();
 });

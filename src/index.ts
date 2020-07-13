@@ -69,11 +69,11 @@ const formHandler = {
   get(target: any, prop: string) {
     if (prop in target) {
       if(prop === "controls") {
-        let o: IControls = {};
+        const oControls: IControls = {};
         Object.keys(target[prop]).forEach(key => {
-          o[key] = new Proxy(target[prop][key], baseHandler);
+          oControls[key] = new Proxy(target[prop][key], baseHandler);
         });
-        return new Proxy(o, baseHandler);
+        return new Proxy(oControls, baseHandler);
       }
       return target[prop];
     }

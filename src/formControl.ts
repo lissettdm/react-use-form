@@ -45,8 +45,8 @@ export class FormControlTarget {
 
 const formControlHandler = {
   construct(target: any, arg: any) {
-    const {touched, value, error, errorMessage, validators} = new target(...arg);
-    return {touched, value, error, errorMessage, validators};
+    const { touched, value, error, errorMessage, validators } = new target(...arg);
+    return { touched, value, error, errorMessage, validators };
   },
   get: function (target: any, prop: string) {
     if (prop in target) {
@@ -59,7 +59,7 @@ const formControlHandler = {
   },
   ...hasProp,
   ...ownKeyProp,
-  ...defineProp
+  ...defineProp,
 };
 
 export const FormControl = new Proxy(FormControlTarget, formControlHandler);

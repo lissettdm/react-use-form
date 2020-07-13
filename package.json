@@ -1,8 +1,8 @@
 {
   "name": "react-use-form-control",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "React hook to manage forms controls",
-  "main": "lib/index.js",
+  "main": "lib",
   "types": "lib/index.d.ts",
   "scripts": {
     "prepare": "npm run build",
@@ -10,7 +10,7 @@
     "preversion": "npm run lint",
     "version": "npm run format && git add -A src",
     "postversion": "git push && git push --tags",
-    "build": "tsc",
+    "build": "rollup -c",
     "test": "jest --config jestconfig.json",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "lint": "tslint -p tsconfig.json"
@@ -45,9 +45,17 @@
     "ts-jest": "^25.3.1",
     "tslint": "^6.1.1",
     "tslint-config-prettier": "^1.18.0",
-    "typescript": "^3.8.3"
+    "typescript": "^3.8.3",
+    "@rollup/plugin-babel": "^5.1.0",
+    "@rollup/plugin-commonjs": "^13.0.1",
+    "@rollup/plugin-node-resolve": "^8.4.0",
+    "rollup-plugin-external-globals": "^0.5.0",
+    "rollup-plugin-terser": "^6.1.0",
+    "rollup-plugin-typescript": "^1.0.1",
+    "rollup-plugin-visualizer": "^4.0.4"
   },
   "peerDependencies": {
     "react": "^16.13.1"
-  }
+  },
+  "dependencies": {}
 }

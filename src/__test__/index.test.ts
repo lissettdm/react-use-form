@@ -107,3 +107,27 @@ test('Should remove form control', () => {
   });
   expect(Reflect.has(result.current.form.controls, 'control2')).toBeFalsy();
 });
+
+test('Should throw error while getting undefined property', () => {
+  const { result } = renderHook(() => useForm(dependenControls));
+  let err = null;
+
+  try {
+    console.log(result.current.form.undefinedProp);
+  } catch (error) {
+    err = error;
+  }
+  expect(err.message).toBe('Invalid property undefinedProp');
+});
+
+test('Should throw error while setting a property', () => {
+  const { result } = renderHook(() => useForm(dependenControls));
+  let err = null;
+
+  try {
+    result.current.form.controls = {};
+  } catch (error) {
+    err = error;
+  }
+  expect(err.message).toBe('Cannot set property value of controls');
+});

@@ -219,9 +219,6 @@ export  default Todo;
 |removeFormControl | Remove control, if has relation with other control an error will be throw|
 
 
-  
-  
-
 #### Form
 
 | Property | Type |
@@ -231,6 +228,7 @@ export  default Todo;
 | value |  Object  {[controlName: string]: value}  |
 
   
+  
 #### FormControl
 | Property | Type |
 |-- |-- |
@@ -238,6 +236,9 @@ export  default Todo;
 | error |  Boolean (optional) |
 | errorMessage|  string (optional)|
 | validators |  Array  of  ControlValidator (optional)|
+| touched |  boolean, the default value is false|
+
+
 
 #### ControlValidator
 | Property | Type |
